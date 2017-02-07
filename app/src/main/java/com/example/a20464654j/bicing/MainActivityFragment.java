@@ -1,5 +1,8 @@
 package com.example.a20464654j.bicing;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -26,6 +30,7 @@ public class MainActivityFragment extends Fragment {
     private ScaleBarOverlay scaleBarOverlay;
     private CompassOverlay compassOverlay;
     private IMapController iMapController;
+    private RadiusMarkerClusterer parkingMakers;
 
     public MainActivityFragment() {
     }
@@ -42,10 +47,32 @@ public class MainActivityFragment extends Fragment {
         setZoom();
         setOverlays();
 
+        putMakers();
+
         map.invalidate();
 
 
         return view;
+    }
+
+    private void putMakers(){
+
+        setupMakerOverlay();
+
+
+    }
+
+    private void setupMakerOverlay(){
+
+        parkingMakers = new RadiusMarkerClusterer( getContext() );
+        map.getOverlays().add( parkingMakers );
+
+        Drawable clusterIconD = getResources().getDrawable( R.drawable.marker_cluster);
+        Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
+
+        parkingMakers.setIcon( clusterIcon );
+        parkingMakers.setRadius( 100 );
+
     }
 
     private void initializeMap(){
