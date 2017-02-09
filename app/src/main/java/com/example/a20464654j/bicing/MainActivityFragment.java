@@ -51,7 +51,6 @@ public class MainActivityFragment extends Fragment {
 
         map.invalidate();
 
-
         return view;
     }
 
@@ -60,6 +59,15 @@ public class MainActivityFragment extends Fragment {
         setupMakerOverlay();
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        //provem l'extraccio de dades de l¡api
+        RefreshDataTask task = new RefreshDataTask( getActivity().getApplicationContext() );
+        task.execute();
     }
 
     private void setupMakerOverlay(){
@@ -76,7 +84,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void initializeMap(){
-        map.setTileSource(TileSourceFactory.HIKEBIKEMAP );
+        map.setTileSource( TileSourceFactory.HIKEBIKEMAP );
         map.setTilesScaledToDpi( true );
 
         map.setBuiltInZoomControls( true );
@@ -85,7 +93,7 @@ public class MainActivityFragment extends Fragment {
 
     private void setZoom(){
         iMapController = map.getController();
-        iMapController.setZoom( 15 );
+        iMapController.setZoom( 14 );
     }
 
     private void setOverlays(){

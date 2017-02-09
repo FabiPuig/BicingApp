@@ -1,5 +1,7 @@
 package com.example.a20464654j.bicing;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +23,7 @@ public class CridaApi {
 
         try{
             String respostaJson = HttpUtils.get( urlApi );
+            return tractaJson( respostaJson );
         }catch ( IOException e){
             e.printStackTrace();
         }
@@ -41,10 +44,24 @@ public class CridaApi {
                 JSONObject o = parkingsJSON.getJSONObject( i );
 
                 Park park = new Park();
-                park.setName( o.getString("streetName" + ", " + o.getString("streetNumber") ) );
                 park.setId( o.getString( "id" ) );
+                if( !o.getString("streetName").contains("(PK)") ){
+                    park.setName( o.getString("streetName" ) + ", " + o.getString("streetNumber")  );
+                }else{
+                    park.setName( o.getString("streetName" ).substring( 5, o.getString( "streetName").length()  ) + ", " + o.getString("streetNumber")  );
+                }
                 park.setLat( o.getString( "latitude" ) );
+                park.setLon( o.getString( "longitude" ));
+                park.setType( o.getString( "type" ) );
+                park.setSlots( Integer.parseInt( o.getString( "slots" ) ) );
+                park.setBykes( Integer.parseInt( o.getString( "bikes" ) ) );
+
+                Log.d("DEBBUG", park.toString() );
+
+                parks.add( park );
             }
+
+            return parks;
 
         }catch ( JSONException e){
             e.printStackTrace();

@@ -55,4 +55,9 @@ public class Park {
     public int getBykes() { return bykes; }
 
     public void setBykes(int bykes) { this.bykes = bykes; }
+
+    @Override
+    public String toString() {
+        return "id: " + id + " name : " + name + " lat: " + lat + " lon: " + lon + " type: " + type + " slots: " + slots + " bykes: " + bykes;
+    }
 }
