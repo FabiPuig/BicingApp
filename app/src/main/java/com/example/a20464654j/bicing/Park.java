@@ -11,7 +11,10 @@ public class Park {
     private String lat;
     private String lon;
     private String type;
+
+    // huecos disponibles
     private int slots;
+    // bicis disponibles
     private int bykes;
 
     public String getId() { return id; }
