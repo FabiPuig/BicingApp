@@ -165,7 +165,7 @@ public class MainActivityFragment extends Fragment {
                 // places totals del parking
                 int plazas = p.getBykes() + p.getSlots();
                 // percentatge d'ocupacio
-                int percent = p.getSlots() * 100 / plazas;
+                int percent = p.getBykes() * 100 / plazas;
 
                 if( percent < 25 ){
                     if( p.getType().equalsIgnoreCase( "bike" )){
@@ -202,7 +202,7 @@ public class MainActivityFragment extends Fragment {
                 marker.setImage( getResources().getDrawable( R.drawable.parking ) );
                 marker.setTitle( p.getName() );
 
-                int disponibles = p.getSlots() - p.getBykes();
+                int disponibles = p.getSlots();
 
                 marker.setSubDescription( "Places disponibles : " + disponibles );
                 marker.setAlpha( 0.6f );
