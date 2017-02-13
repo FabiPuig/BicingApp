@@ -22,6 +22,13 @@ public class RefreshDataTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        Events.post("inici-cargando");
+    }
+
+    @Override
     protected Void doInBackground(Void... params) {
 
         parkings = new ArrayList<>();
@@ -36,6 +43,7 @@ public class RefreshDataTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         Events.create("show-makers").param( parkings ).post();
+        Events.post("fin-cargando");
 
     }
 }

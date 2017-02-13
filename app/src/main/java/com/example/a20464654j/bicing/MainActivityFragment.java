@@ -1,13 +1,18 @@
 package com.example.a20464654j.bicing;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,6 +44,8 @@ public class MainActivityFragment extends Fragment {
     private IMapController iMapController;
     private RadiusMarkerClusterer parkingMakers;
 
+    private ProgressDialog dialog;
+
     public MainActivityFragment() {
     }
 
@@ -50,6 +57,9 @@ public class MainActivityFragment extends Fragment {
 
         map = (MapView) view.findViewById( R.id.map );
 
+        dialog = new ProgressDialog( getContext() );
+        dialog.setMessage("Cargando...");
+
         initializeMap();
         setZoom();
         setOverlays();
@@ -59,6 +69,31 @@ public class MainActivityFragment extends Fragment {
         map.invalidate();
 
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu( true );
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate( R.menu.menu_activity_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if( id == R.id.action_refresh ){
+            refresh();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void putMakers(){
@@ -73,7 +108,10 @@ public class MainActivityFragment extends Fragment {
 
         Events.register( this );
 
-        //provem l'extraccio de dades de l¡api
+        refresh();
+    }
+
+    private void refresh(){
         RefreshDataTask task = new RefreshDataTask( getActivity().getApplicationContext() );
         task.execute();
     }
@@ -216,5 +254,15 @@ public class MainActivityFragment extends Fragment {
 
         }
 
+    }
+
+    @Events.Subscribe("inici-cargando")
+    private void preLoading(){
+        dialog.show();
+    }
+
+    @Events.Subscribe("fin-cargando")
+    private void postLoading(){
+        dialog.dismiss();
     }
 }
